@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { listQuizzes } from "@/server/quizzes.functions";
 import { Lock, Sparkles, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SUBJECTS } from "@/lib/subjects";
+import { FLAT_SUBJECTS } from "@/lib/subjects";
 
 export const Route = createFileRoute("/quizzes")({
   head: () => ({
@@ -17,10 +17,10 @@ export const Route = createFileRoute("/quizzes")({
   component: QuizzesPage,
 });
 
-const FALLBACK = SUBJECTS.flatMap((s, i) =>
+const FALLBACK = FLAT_SUBJECTS.flatMap((s, i) =>
   Array.from({ length: 2 }, (_, j) => ({
     id: i * 10 + j,
-    slug: `${s.slug}-${j + 1}`,
+    slug: `${s.name.toLowerCase().replace(/\s+/g, "-")}-${j + 1}`,
     title: `${s.name}: Practice set ${j + 1}`,
     excerpt: `Sharpen your ${s.name.toLowerCase()} skills with a focused 10-question quiz.`,
     subject: s.name,
