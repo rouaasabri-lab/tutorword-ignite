@@ -82,6 +82,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Lovable App" },
       { name: "twitter:description", content: "TutorWorld IGCSE Hub is an educational platform offering IGCSE revision resources and quizzes." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5f906e65-e5d0-4502-a474-1ed2274ceced/id-preview-30bcf2ce--50c735c6-f1f1-4c3c-bde8-047ebb29195a.lovable.app-1778154216055.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5f906e65-e5d0-4502-a474-1ed2274ceced/id-preview-30bcf2ce--50c735c6-f1f1-4c3c-bde8-047ebb29195a.lovable.app-1778154216055.png" },
     ],
     links: [
       {
