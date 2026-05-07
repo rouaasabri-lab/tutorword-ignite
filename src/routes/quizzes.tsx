@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { listQuizzes } from "@/server/quizzes.functions";
+import { listQuizzes } from "@/utils/quizzes.functions";
 import { Lock, Sparkles, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FLAT_SUBJECTS } from "@/lib/subjects";

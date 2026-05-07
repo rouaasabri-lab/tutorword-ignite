@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { wpFetch } from "./woocommerce.server";
+import { wpFetch } from "@/server/woocommerce.server";
 
 export type Quiz = {
   id: number;
