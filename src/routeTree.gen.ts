@@ -14,6 +14,7 @@ import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QuizSlugRouteImport } from './routes/quiz.$slug'
 
 const SubjectsRoute = SubjectsRouteImport.update({
   id: '/subjects',
@@ -40,6 +41,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizSlugRoute = QuizSlugRouteImport.update({
+  id: '/quiz/$slug',
+  path: '/quiz/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/quizzes': typeof QuizzesRoute
   '/subjects': typeof SubjectsRoute
+  '/quiz/$slug': typeof QuizSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/quizzes': typeof QuizzesRoute
   '/subjects': typeof SubjectsRoute
+  '/quiz/$slug': typeof QuizSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,27 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/quizzes': typeof QuizzesRoute
   '/subjects': typeof SubjectsRoute
+  '/quiz/$slug': typeof QuizSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/pricing' | '/quizzes' | '/subjects'
+  fullPaths:
+    | '/'
+    | '/account'
+    | '/pricing'
+    | '/quizzes'
+    | '/subjects'
+    | '/quiz/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/pricing' | '/quizzes' | '/subjects'
-  id: '__root__' | '/' | '/account' | '/pricing' | '/quizzes' | '/subjects'
+  to: '/' | '/account' | '/pricing' | '/quizzes' | '/subjects' | '/quiz/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/account'
+    | '/pricing'
+    | '/quizzes'
+    | '/subjects'
+    | '/quiz/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +99,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   QuizzesRoute: typeof QuizzesRoute
   SubjectsRoute: typeof SubjectsRoute
+  QuizSlugRoute: typeof QuizSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quiz/$slug': {
+      id: '/quiz/$slug'
+      path: '/quiz/$slug'
+      fullPath: '/quiz/$slug'
+      preLoaderRoute: typeof QuizSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,7 +155,18 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   QuizzesRoute: QuizzesRoute,
   SubjectsRoute: SubjectsRoute,
+  QuizSlugRoute: QuizSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
