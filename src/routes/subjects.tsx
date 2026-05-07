@@ -1,14 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { SUBJECTS } from "@/lib/subjects";
-import { ArrowRight } from "lucide-react";
+import { SUBJECT_GROUPS } from "@/lib/subjects";
+import { ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/subjects")({
   head: () => ({
     meta: [
       { title: "IGCSE Subjects — tutorword" },
-      { name: "description", content: "Explore every IGCSE subject we cover, from Mathematics to Computer Science." },
+      { name: "description", content: "Every IGCSE subject covered — Maths, Sciences, English and Humanities." },
     ],
   }),
   component: SubjectsPage,
@@ -18,42 +18,45 @@ function SubjectsPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <section className="bg-hero">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Subjects</p>
-          <h1 className="mt-3 max-w-3xl font-display text-5xl font-bold md:text-6xl">
-            Every IGCSE subject, mapped topic by topic.
+      <section className="bg-ink text-cream">
+        <div className="mx-auto max-w-7xl px-6 py-20 text-center md:py-28">
+          <h1 className="mx-auto max-w-3xl font-display text-5xl font-extrabold md:text-6xl">
+            Every IGCSE subject, <span className="text-primary">topic by topic.</span>
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-            Pick a subject to see topic notes and start practising with quizzes built by tutors.
+          <p className="mx-auto mt-5 max-w-xl text-cream/75">
+            Pick a subject and start practising — quizzes, notes and exam questions built by tutors.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {SUBJECTS.map((s) => (
-            <Link
-              key={s.slug}
-              to="/quizzes"
-              className="group flex flex-col rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-soft"
-            >
-              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft font-display text-3xl text-primary">
-                {s.emoji}
-              </div>
-              <h3 className="mt-6 font-display text-2xl font-semibold">{s.name}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.blurb}</p>
-              <div className="mt-6 flex items-center gap-4 text-xs text-muted-foreground">
-                <span>{s.topics} topics</span>
-                <span className="h-1 w-1 rounded-full bg-border" />
-                <span>{s.questions} questions</span>
-              </div>
-              <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                Practice now <ArrowRight className="h-4 w-4" />
-              </div>
-            </Link>
-          ))}
-        </div>
+      <section className="mx-auto max-w-7xl space-y-6 px-6 py-16">
+        {SUBJECT_GROUPS.map((g) => (
+          <div key={g.slug} className="overflow-hidden rounded-[2rem] bg-emerald-grad p-8 text-primary-foreground shadow-soft md:p-12">
+            <div className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-card/15 text-lg backdrop-blur">{g.emoji}</span>
+              <h2 className="font-display text-2xl font-extrabold md:text-3xl">{g.name}</h2>
+            </div>
+            <p className="mt-2 max-w-xl text-sm text-primary-foreground/80">{g.description}</p>
+            <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {g.subjects.map((s) => (
+                <div key={s.name} className="rounded-2xl bg-cream/95 p-5 text-foreground shadow-soft">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-display text-lg font-bold">{s.name}</h3>
+                    <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary-soft text-primary">{g.emoji}</span>
+                  </div>
+                  <div className="mt-4 space-y-2">
+                    {s.tiers.map((t) => (
+                      <Link key={t.slug} to="/quizzes" className="group flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold transition hover:border-primary hover:bg-primary-soft">
+                        {t.label}
+                        <ChevronRight className="h-4 w-4 text-muted-foreground transition group-hover:text-primary" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
       <Footer />
     </div>

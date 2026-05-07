@@ -53,21 +53,20 @@ function PricingPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <section className="bg-hero">
+      <section className="bg-ink text-cream">
         <div className="mx-auto max-w-7xl px-6 py-20 text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Pricing</p>
-          <h1 className="mx-auto mt-3 max-w-3xl font-display text-5xl font-bold md:text-6xl">
-            Simple plans. Serious results.
+          <h1 className="mx-auto max-w-3xl font-display text-5xl font-extrabold md:text-6xl">
+            Simple plans. <span className="text-primary">Serious results.</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-xl text-cream/75">
             Start free, upgrade when you want the full IGCSE library.
           </p>
-          <div className="mt-8 inline-flex items-center rounded-full border border-border bg-card p-1 text-sm">
+          <div className="mt-8 inline-flex items-center rounded-full bg-cream/10 p-1 text-sm ring-1 ring-cream/15">
             {(["monthly", "yearly"] as const).map((b) => (
               <button
                 key={b}
                 onClick={() => setBilling(b)}
-                className={`rounded-full px-5 py-2 font-medium transition ${billing === b ? "bg-emerald-grad text-primary-foreground" : "text-muted-foreground"}`}
+                className={`rounded-full px-5 py-2 font-semibold transition ${billing === b ? "bg-emerald-grad text-primary-foreground" : "text-cream/70"}`}
               >
                 {b === "monthly" ? "Monthly" : "Yearly · save 20%"}
               </button>

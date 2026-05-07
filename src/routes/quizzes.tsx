@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { listQuizzes } from "@/server/quizzes.functions";
 import { Lock, Sparkles, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SUBJECTS } from "@/lib/subjects";
+import { FLAT_SUBJECTS } from "@/lib/subjects";
 
 export const Route = createFileRoute("/quizzes")({
   head: () => ({
@@ -17,10 +17,10 @@ export const Route = createFileRoute("/quizzes")({
   component: QuizzesPage,
 });
 
-const FALLBACK = SUBJECTS.flatMap((s, i) =>
+const FALLBACK = FLAT_SUBJECTS.flatMap((s, i) =>
   Array.from({ length: 2 }, (_, j) => ({
     id: i * 10 + j,
-    slug: `${s.slug}-${j + 1}`,
+    slug: `${s.name.toLowerCase().replace(/\s+/g, "-")}-${j + 1}`,
     title: `${s.name}: Practice set ${j + 1}`,
     excerpt: `Sharpen your ${s.name.toLowerCase()} skills with a focused 10-question quiz.`,
     subject: s.name,
@@ -40,13 +40,12 @@ function QuizzesPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <section className="bg-hero">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Quizzes</p>
-          <h1 className="mt-3 max-w-3xl font-display text-5xl font-bold md:text-6xl">
-            Practice the way you'll be tested.
+      <section className="bg-ink text-cream">
+        <div className="mx-auto max-w-7xl px-6 py-20 text-center md:py-28">
+          <h1 className="mx-auto max-w-3xl font-display text-5xl font-extrabold md:text-6xl">
+            Practice the way you'll <span className="text-primary">be tested.</span>
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-2xl text-cream/75">
             Every quiz mirrors real IGCSE question style and difficulty. Free quizzes daily — full library with Pro.
           </p>
         </div>

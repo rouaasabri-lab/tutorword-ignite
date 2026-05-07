@@ -1,19 +1,63 @@
-export type Subject = {
+export type Tier = { label: string; slug: string };
+export type SubjectGroup = {
   slug: string;
   name: string;
-  blurb: string;
-  topics: number;
-  questions: number;
   emoji: string;
+  description: string;
+  subjects: { name: string; tiers: Tier[] }[];
 };
 
-export const SUBJECTS: Subject[] = [
-  { slug: "mathematics", name: "Mathematics", blurb: "Algebra, geometry, statistics & calculus prep.", topics: 18, questions: 1240, emoji: "∑" },
-  { slug: "physics", name: "Physics", blurb: "Mechanics, electricity, waves & modern physics.", topics: 14, questions: 920, emoji: "⚛" },
-  { slug: "chemistry", name: "Chemistry", blurb: "Atoms, bonding, organic & physical chemistry.", topics: 15, questions: 880, emoji: "⚗" },
-  { slug: "biology", name: "Biology", blurb: "Cells, genetics, ecology & human biology.", topics: 16, questions: 1010, emoji: "🧬" },
-  { slug: "english", name: "English Language", blurb: "Comprehension, writing technique & analysis.", topics: 10, questions: 540, emoji: "✎" },
-  { slug: "economics", name: "Economics", blurb: "Micro, macro, trade & development.", topics: 12, questions: 670, emoji: "₤" },
-  { slug: "business", name: "Business Studies", blurb: "Operations, finance, marketing & HR.", topics: 11, questions: 580, emoji: "◎" },
-  { slug: "computer-science", name: "Computer Science", blurb: "Algorithms, data, networks & programming.", topics: 13, questions: 720, emoji: "⌘" },
+export const SUBJECT_GROUPS: SubjectGroup[] = [
+  {
+    slug: "mathematics",
+    name: "IGCSE Mathematics",
+    emoji: "∑",
+    description: "Core & Extended — algebra, geometry, statistics.",
+    subjects: [
+      { name: "Mathematics", tiers: [{ label: "Core", slug: "math-core" }, { label: "Extended", slug: "math-ext" }] },
+      { name: "Additional Mathematics", tiers: [{ label: "0606", slug: "add-math" }] },
+    ],
+  },
+  {
+    slug: "sciences",
+    name: "IGCSE Sciences",
+    emoji: "⚗",
+    description: "Physics, Chemistry, Biology — Core & Extended.",
+    subjects: [
+      { name: "Physics", tiers: [{ label: "Core", slug: "phy-core" }, { label: "Extended", slug: "phy-ext" }] },
+      { name: "Chemistry", tiers: [{ label: "Core", slug: "chem-core" }, { label: "Extended", slug: "chem-ext" }] },
+      { name: "Biology", tiers: [{ label: "Core", slug: "bio-core" }, { label: "Extended", slug: "bio-ext" }] },
+    ],
+  },
+  {
+    slug: "english",
+    name: "IGCSE English",
+    emoji: "✎",
+    description: "First Language & Literature in English.",
+    subjects: [
+      { name: "English Language", tiers: [{ label: "0500", slug: "eng-lang" }] },
+      { name: "Literature in English", tiers: [{ label: "0475", slug: "eng-lit" }] },
+    ],
+  },
+  {
+    slug: "humanities",
+    name: "IGCSE Humanities",
+    emoji: "₤",
+    description: "Economics, Business and Computer Science.",
+    subjects: [
+      { name: "Economics", tiers: [{ label: "0455", slug: "econ" }] },
+      { name: "Business Studies", tiers: [{ label: "0450", slug: "bus" }] },
+      { name: "Computer Science", tiers: [{ label: "0478", slug: "cs" }] },
+    ],
+  },
 ];
+
+// Flat list for simpler pages
+export const FLAT_SUBJECTS = SUBJECT_GROUPS.flatMap((g) =>
+  g.subjects.map((s) => ({
+    name: s.name,
+    group: g.name,
+    emoji: g.emoji,
+    tiers: s.tiers,
+  })),
+);
