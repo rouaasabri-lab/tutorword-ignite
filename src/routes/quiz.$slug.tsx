@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getQuizBySlug, type SampleQuiz } from "@/lib/sample-quizzes";
-import { Check, X, ArrowRight, RotateCcw, Trophy, Clock, Lock } from "lucide-react";
+import { Check, X, ArrowRight, RotateCcw, Trophy, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/quiz/$slug")({
   head: ({ params }) => {
@@ -273,6 +273,3 @@ function QuizRunner({ quiz, onExit }: { quiz: SampleQuiz; onExit: () => void }) 
     </section>
   );
 }
-
-// Re-export so tree-shaking keeps the icon import even if unused above
-export const _Lock = Lock;
