@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getQuizBySlug, type SampleQuiz } from "@/lib/sample-quizzes";
+import { getQuiz } from "@/utils/quizzes.functions";
 import { Check, X, ArrowRight, RotateCcw, Trophy, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/quiz/$slug")({
@@ -30,8 +32,44 @@ export const Route = createFileRoute("/quiz/$slug")({
 
 function QuizPlayer() {
   const { slug } = Route.useParams();
-  const quiz = getQuizBySlug(slug);
+  const local = getQuizBySlug(slug);
   const navigate = useNavigate();
+
+  const { data: remote, isLoading } = useQuery({
+    queryKey: ["quiz", slug],
+    queryFn: () => getQuiz({ data: { slug } }),
+    enabled: !local,
+  });
+
+  const quiz: SampleQuiz | null = local
+    ? local
+    : remote && remote.questions_data.length
+    ? {
+        slug: remote.slug,
+        title: remote.title,
+        subject: (remote.subject as SampleQuiz["subject"]) ?? "Mathematics",
+        difficulty: (remote.difficulty as SampleQuiz["difficulty"]) ?? "Core",
+        durationMin: Math.max(5, Math.round(remote.questions_data.length * 1.2)),
+        premium: !!remote.premium,
+        questions: remote.questions_data.map((q, i) => ({
+          id: `q${i + 1}`,
+          prompt: q.prompt,
+          choices: q.choices.map((text, j) => ({ id: String.fromCharCode(97 + j), text })),
+          answer: String.fromCharCode(97 + (q.correctIndex || 0)),
+          explanation: q.explanation || "",
+        })),
+      }
+    : null;
+
+  if (!local && isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="mx-auto max-w-2xl px-6 py-24 text-center text-muted-foreground">Loading quiz…</div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!quiz) {
     return (
