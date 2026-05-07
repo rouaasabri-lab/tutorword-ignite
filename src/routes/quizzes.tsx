@@ -40,13 +40,12 @@ function QuizzesPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <section className="bg-hero">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Quizzes</p>
-          <h1 className="mt-3 max-w-3xl font-display text-5xl font-bold md:text-6xl">
-            Practice the way you'll be tested.
+      <section className="bg-ink text-cream">
+        <div className="mx-auto max-w-7xl px-6 py-20 text-center md:py-28">
+          <h1 className="mx-auto max-w-3xl font-display text-5xl font-extrabold md:text-6xl">
+            Practice the way you'll <span className="text-primary">be tested.</span>
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-2xl text-cream/75">
             Every quiz mirrors real IGCSE question style and difficulty. Free quizzes daily — full library with Pro.
           </p>
         </div>
