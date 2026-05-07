@@ -12,7 +12,7 @@ export const Route = createFileRoute("/quiz/$slug")({
     const q = getQuizBySlug(params.slug);
     return {
       meta: [
-        { title: q ? `${q.title} — tutorword Quiz` : "Quiz — tutorword" },
+        { title: q ? `${q.title} — tutorworld Quiz` : "Quiz — tutorworld" },
         { name: "description", content: q?.title ?? "Practice IGCSE quiz." },
       ],
     };
