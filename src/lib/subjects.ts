@@ -20,34 +20,20 @@ export const SUBJECT_GROUPS: SubjectGroup[] = [
   },
   {
     slug: "sciences",
-    name: "IGCSE Sciences",
-    emoji: "⚗",
-    description: "Physics, Chemistry, Biology — Core & Extended.",
+    name: "IGCSE Physics",
+    emoji: "𝛗",
+    description: "Mechanics, electricity, waves — Core & Extended.",
     subjects: [
       { name: "Physics", tiers: [{ label: "Core", slug: "phy-core" }, { label: "Extended", slug: "phy-ext" }] },
+    ],
+  },
+  {
+    slug: "chemistry",
+    name: "IGCSE Chemistry",
+    emoji: "⚗",
+    description: "Atomic structure, reactions, organic — Core & Extended.",
+    subjects: [
       { name: "Chemistry", tiers: [{ label: "Core", slug: "chem-core" }, { label: "Extended", slug: "chem-ext" }] },
-      { name: "Biology", tiers: [{ label: "Core", slug: "bio-core" }, { label: "Extended", slug: "bio-ext" }] },
-    ],
-  },
-  {
-    slug: "english",
-    name: "IGCSE English",
-    emoji: "✎",
-    description: "First Language & Literature in English.",
-    subjects: [
-      { name: "English Language", tiers: [{ label: "0500", slug: "eng-lang" }] },
-      { name: "Literature in English", tiers: [{ label: "0475", slug: "eng-lit" }] },
-    ],
-  },
-  {
-    slug: "humanities",
-    name: "IGCSE Humanities",
-    emoji: "₤",
-    description: "Economics, Business and Computer Science.",
-    subjects: [
-      { name: "Economics", tiers: [{ label: "0455", slug: "econ" }] },
-      { name: "Business Studies", tiers: [{ label: "0450", slug: "bus" }] },
-      { name: "Computer Science", tiers: [{ label: "0478", slug: "cs" }] },
     ],
   },
 ];
