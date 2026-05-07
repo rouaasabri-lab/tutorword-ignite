@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Crown } from "lucide-react";
 import { createCheckout } from "@/utils/checkout.functions";
 
 export const Route = createFileRoute("/pricing")({
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/pricing")({
 });
 
 const FREE = [
-  "3 free quizzes per subject",
+  "1 free quiz per subject",
   "Sample topic notes",
   "Basic progress tracking",
   "Access on any device",
@@ -79,7 +79,7 @@ function PricingPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-3xl border border-border bg-card p-8 shadow-soft">
             <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Free</p>
-            <p className="mt-3 font-display text-5xl font-bold">£0</p>
+            <p className="mt-3 font-display text-5xl font-bold">$0</p>
             <p className="mt-1 text-sm text-muted-foreground">Forever. No card needed.</p>
             <Button asChild variant="outline" className="mt-6 w-full">
               <Link to="/quizzes">Start free</Link>
@@ -93,15 +93,15 @@ function PricingPage() {
 
           <div className="relative overflow-hidden rounded-3xl bg-emerald-grad p-8 text-primary-foreground shadow-glow">
             <div className="absolute right-6 top-6 inline-flex items-center gap-1 rounded-full bg-card/15 px-3 py-1 text-xs font-medium backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" /> Most popular
+              <Crown className="h-3.5 w-3.5" /> Most popular
             </div>
             <p className="text-sm font-semibold uppercase tracking-wider opacity-80">Pro</p>
             <p className="mt-3 font-display text-5xl font-bold">
-              {billing === "monthly" ? "£12" : "£115"}
+              {billing === "monthly" ? "$15" : "$144"}
               <span className="text-base font-normal opacity-80">/{billing === "monthly" ? "mo" : "yr"}</span>
             </p>
             <p className="mt-1 text-sm opacity-80">
-              {billing === "yearly" ? "Equivalent to £9.6/mo · 2 months free" : "Cancel anytime"}
+              {billing === "yearly" ? "Equivalent to $12/mo · 2 months free" : "Cancel anytime"}
             </p>
             <Button onClick={upgrade} disabled={loading} className="mt-6 w-full bg-card text-foreground hover:bg-card/90">
               {loading ? "Redirecting…" : "Upgrade to Pro"}

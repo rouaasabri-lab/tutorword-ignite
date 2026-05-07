@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { listQuizzes } from "@/utils/quizzes.functions";
-import { Lock, Sparkles, Timer } from "lucide-react";
+import { Lock, Timer, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FLAT_SUBJECTS } from "@/lib/subjects";
+import { SAMPLE_QUIZZES } from "@/lib/sample-quizzes";
 
 export const Route = createFileRoute("/quizzes")({
   head: () => ({
@@ -17,25 +17,42 @@ export const Route = createFileRoute("/quizzes")({
   component: QuizzesPage,
 });
 
-const FALLBACK = FLAT_SUBJECTS.flatMap((s, i) =>
-  Array.from({ length: 2 }, (_, j) => ({
-    id: i * 10 + j,
-    slug: `${s.name.toLowerCase().replace(/\s+/g, "-")}-${j + 1}`,
-    title: `${s.name}: Practice set ${j + 1}`,
-    excerpt: `Sharpen your ${s.name.toLowerCase()} skills with a focused 10-question quiz.`,
-    subject: s.name,
+// Build the full catalogue: 1 free sample per subject + locked Pro placeholders.
+const SUBJECTS = ["Mathematics", "Physics", "Chemistry"] as const;
+
+const CATALOGUE = SUBJECTS.flatMap((subject, si) => {
+  const free = SAMPLE_QUIZZES.find((q) => q.subject === subject)!;
+  const locked = Array.from({ length: 3 }, (_, j) => ({
+    id: si * 100 + j + 2,
+    slug: `${subject.toLowerCase()}-pro-${j + 1}`,
+    title: `${subject}: Topic set ${j + 2}`,
+    excerpt: `In-depth ${subject.toLowerCase()} practice covering exam-style questions and mark-scheme walkthroughs.`,
+    subject,
     questions: 10,
-    difficulty: ["Foundation", "Core", "Extended"][(i + j) % 3],
-    premium: (i + j) % 3 === 2,
-  })),
-);
+    difficulty: j === 2 ? "Extended" : "Core",
+    premium: true,
+  }));
+  return [
+    {
+      id: si * 100 + 1,
+      slug: free.slug,
+      title: free.title,
+      excerpt: `A free starter quiz for ${subject}. Includes instant grading and answer explanations.`,
+      subject,
+      questions: free.questions.length,
+      difficulty: free.difficulty,
+      premium: false,
+    },
+    ...locked,
+  ];
+});
 
 function QuizzesPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["quizzes"],
     queryFn: () => listQuizzes(),
   });
-  const quizzes = (data && data.length ? data : FALLBACK);
+  const quizzes = data && data.length ? data : CATALOGUE;
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,7 +92,7 @@ function QuizzesPage() {
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-grad px-2.5 py-1 text-xs text-primary-foreground">
-                      <Sparkles className="h-3 w-3" /> Free
+                      <GraduationCap className="h-3 w-3" /> Free
                     </span>
                   )}
                 </div>
@@ -85,11 +102,15 @@ function QuizzesPage() {
                   <span className="inline-flex items-center gap-1.5"><Timer className="h-3.5 w-3.5" /> {q.questions ?? 10} Qs</span>
                   {q.difficulty && <><span className="h-1 w-1 rounded-full bg-border" /><span>{q.difficulty}</span></>}
                 </div>
-                <Button asChild size="sm" className="mt-6 w-full bg-emerald-grad text-primary-foreground hover:opacity-90" disabled={q.premium}>
-                  <Link to={q.premium ? "/pricing" : "/quizzes"}>
-                    {q.premium ? "Unlock with Pro" : "Start quiz"}
-                  </Link>
-                </Button>
+                {q.premium ? (
+                  <Button asChild size="sm" className="mt-6 w-full bg-foreground text-background hover:bg-foreground/90">
+                    <Link to="/pricing">Unlock with Pro</Link>
+                  </Button>
+                ) : (
+                  <Button asChild size="sm" className="mt-6 w-full bg-emerald-grad text-primary-foreground hover:opacity-90">
+                    <Link to="/quiz/$slug" params={{ slug: q.slug }}>Start quiz</Link>
+                  </Button>
+                )}
               </article>
             ))}
           </div>
