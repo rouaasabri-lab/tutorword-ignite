@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { wpFetch } from "@/server/woocommerce.server";
+import { z } from "zod";
 
 export type Quiz = {
   id: number;
@@ -11,6 +12,15 @@ export type Quiz = {
   premium?: boolean;
   slug: string;
 };
+
+export type QuizQuestion = {
+  prompt: string;
+  choices: string[];
+  correctIndex: number;
+  explanation?: string;
+};
+
+export type FullQuiz = Quiz & { questions_data: QuizQuestion[] };
 
 type WPPost = {
   id: number;
@@ -56,3 +66,61 @@ export const listQuizzes = createServerFn({ method: "GET" }).handler(async (): P
     return [];
   }
 });
+
+function parseQuestions(raw: unknown): QuizQuestion[] {
+  // Accept ACF repeater [{prompt, choices:[{text}], correct_index, explanation}]
+  // or a JSON string in meta, or a flat array of {prompt,choices,answer,explanation}.
+  let arr: unknown = raw;
+  if (typeof raw === "string") {
+    try { arr = JSON.parse(raw); } catch { return []; }
+  }
+  if (!Array.isArray(arr)) return [];
+  return arr.map((q) => {
+    const o = (q ?? {}) as Record<string, unknown>;
+    const choicesRaw = (o.choices ?? o.options ?? []) as unknown[];
+    const choices = choicesRaw.map((c) =>
+      typeof c === "string" ? c : String((c as Record<string, unknown>)?.text ?? ""),
+    );
+    const correctIndex = Number(o.correct_index ?? o.correctIndex ?? o.answer_index ?? 0);
+    return {
+      prompt: String(o.prompt ?? o.question ?? ""),
+      choices,
+      correctIndex: Number.isFinite(correctIndex) ? correctIndex : 0,
+      explanation: o.explanation ? String(o.explanation) : undefined,
+    };
+  });
+}
+
+const SlugSchema = z.object({ slug: z.string().min(1).max(255) });
+
+export const getQuiz = createServerFn({ method: "GET" })
+  .inputValidator((data) => SlugSchema.parse(data))
+  .handler(async ({ data }): Promise<FullQuiz | null> => {
+    if (!process.env.WP_API_URL) return null;
+    try {
+      let posts: WPPost[] = [];
+      try {
+        posts = await wpFetch<WPPost[]>(`/quiz?slug=${encodeURIComponent(data.slug)}&_embed`);
+      } catch {
+        posts = await wpFetch<WPPost[]>(`/posts?slug=${encodeURIComponent(data.slug)}&_embed`);
+      }
+      const p = posts[0];
+      if (!p) return null;
+      const fields = { ...(p.acf ?? {}), ...(p.meta ?? {}) };
+      const questionsData = parseQuestions(pick(fields, ["questions_data", "quiz_questions", "questions"]));
+      return {
+        id: p.id,
+        slug: p.slug,
+        title: p.title.rendered.replace(/<[^>]+>/g, ""),
+        excerpt: p.excerpt.rendered.replace(/<[^>]+>/g, "").trim(),
+        subject: pick(fields, ["subject", "_subject"]) as string | undefined,
+        difficulty: pick(fields, ["difficulty", "level"]) as string | undefined,
+        premium: Boolean(pick(fields, ["premium", "is_premium"])),
+        questions: questionsData.length,
+        questions_data: questionsData,
+      };
+    } catch (e) {
+      console.error("getQuiz failed", e);
+      return null;
+    }
+  });

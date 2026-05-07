@@ -22,6 +22,21 @@ export async function wcFetch<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+export async function wcPost<T>(path: string, body: unknown): Promise<T> {
+  const url = `${wcBase()}${path}`;
+  const auth = authHeader();
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(auth ? { Authorization: auth } : {}),
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`WC ${res.status}: ${await res.text()}`);
+  return res.json() as Promise<T>;
+}
+
 export async function wpFetch<T>(path: string): Promise<T> {
   const url = `${wpBase()}${path}`;
   const res = await fetch(url);
