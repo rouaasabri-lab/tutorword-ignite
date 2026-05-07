@@ -32,7 +32,7 @@ export function Logo({ light = false }: { light?: boolean }) {
       <span
         className={`font-display text-[1.35rem] font-bold tracking-tight leading-none ${light ? "text-cream" : "text-foreground"}`}
       >
-        tutor<span className="text-primary">word</span><span className="text-primary">.</span>
+        tutor<span className="text-primary">world</span><span className="text-primary">.</span>
       </span>
     </div>
   );
