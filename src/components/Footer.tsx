@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="border-t border-border/60 bg-secondary/40">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
-          <p className="font-display text-2xl font-bold">tutorword</p>
+          <p className="font-display text-2xl font-bold">tutorworld</p>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
             Premium IGCSE revision — practice quizzes, structured notes and exam-grade questions, designed by tutors.
           </p>
@@ -27,7 +27,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border/60 px-6 py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} tutorword. Built for IGCSE students.
+        © {new Date().getFullYear()} tutorworld. Built for IGCSE students.
       </div>
     </footer>
   );

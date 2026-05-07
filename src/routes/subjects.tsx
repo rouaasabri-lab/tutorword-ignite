@@ -7,7 +7,7 @@ import { ChevronRight } from "lucide-react";
 export const Route = createFileRoute("/subjects")({
   head: () => ({
     meta: [
-      { title: "IGCSE Subjects — tutorword" },
+      { title: "IGCSE Subjects — tutorworld" },
       { name: "description", content: "Every IGCSE subject covered — Maths, Sciences, English and Humanities." },
     ],
   }),
