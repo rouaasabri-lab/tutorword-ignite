@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles } from "lucide-react";
-import { createCheckout } from "@/server/checkout.functions";
+import { createCheckout } from "@/utils/checkout.functions";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
