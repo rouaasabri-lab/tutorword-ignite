@@ -15,6 +15,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuizSlugRouteImport } from './routes/quiz.$slug'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
 const SubjectsRoute = SubjectsRouteImport.update({
   id: '/subjects',
@@ -46,6 +47,11 @@ const QuizSlugRoute = QuizSlugRouteImport.update({
   path: '/quiz/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/quizzes': typeof QuizzesRoute
   '/subjects': typeof SubjectsRoute
   '/quiz/$slug': typeof QuizSlugRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/quizzes': typeof QuizzesRoute
   '/subjects': typeof SubjectsRoute
   '/quiz/$slug': typeof QuizSlugRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/quizzes': typeof QuizzesRoute
   '/subjects': typeof SubjectsRoute
   '/quiz/$slug': typeof QuizSlugRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,8 +90,16 @@ export interface FileRouteTypes {
     | '/quizzes'
     | '/subjects'
     | '/quiz/$slug'
+    | '/api/public/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/pricing' | '/quizzes' | '/subjects' | '/quiz/$slug'
+  to:
+    | '/'
+    | '/account'
+    | '/pricing'
+    | '/quizzes'
+    | '/subjects'
+    | '/quiz/$slug'
+    | '/api/public/stripe-webhook'
   id:
     | '__root__'
     | '/'
@@ -91,6 +108,7 @@ export interface FileRouteTypes {
     | '/quizzes'
     | '/subjects'
     | '/quiz/$slug'
+    | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,6 +118,7 @@ export interface RootRouteChildren {
   QuizzesRoute: typeof QuizzesRoute
   SubjectsRoute: typeof SubjectsRoute
   QuizSlugRoute: typeof QuizSlugRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -146,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -156,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuizzesRoute: QuizzesRoute,
   SubjectsRoute: SubjectsRoute,
   QuizSlugRoute: QuizSlugRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

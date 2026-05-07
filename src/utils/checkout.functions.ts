@@ -25,8 +25,15 @@ export const createCheckout = createServerFn({ method: "POST" })
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${origin}/account?status=success`,
+      success_url: `${origin}/account?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/pricing?status=cancel`,
+      allow_promotion_codes: true,
+      billing_address_collection: "auto",
+      customer_creation: "always",
+      subscription_data: {
+        metadata: { plan: data.plan, source: "tutorworld" },
+      },
+      metadata: { plan: data.plan, source: "tutorworld" },
     });
 
     return { url: session.url };
