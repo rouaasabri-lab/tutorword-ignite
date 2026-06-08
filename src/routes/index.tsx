@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Globe2, ShieldCheck, Trophy, TrendingUp, ChevronRight, ArrowRight } from "lucide-react";
+import { Globe2, ShieldCheck, Trophy, TrendingUp, ChevronRight, ArrowRight, BookOpen, Shuffle, Timer, FileText } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,13 @@ const TONE: Record<string, string> = {
   rose: "bg-rose-500/15 text-rose-300 ring-rose-400/30",
   green: "bg-emerald-500/15 text-emerald-300 ring-emerald-400/30",
 };
+
+const PHASE_PREVIEW = [
+  { n: 1, icon: BookOpen, title: "Practice per Topic", desc: "Master one topic at a time with focused quizzes." },
+  { n: 2, icon: Shuffle, title: "Random Mixed Practice", desc: "Auto-generated questions across the full syllabus." },
+  { n: 3, icon: Timer, title: "Time Sprints", desc: "5–15 min bursts to build exam-pace accuracy." },
+  { n: 4, icon: FileText, title: "Full Past Papers", desc: "Sit real papers under strict exam timing." },
+];
 
 function Index() {
   return (
@@ -71,10 +78,10 @@ function Index() {
             className="mt-10 flex flex-wrap justify-center gap-3"
           >
             <Button asChild size="lg" className="rounded-full bg-emerald-grad px-7 text-primary-foreground shadow-glow hover:opacity-90">
-              <Link to="/quizzes">Start practising free <ArrowRight className="ml-1 h-4 w-4" /></Link>
+              <Link to="/study-plan">Start your study plan <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full border-cream/30 bg-transparent px-7 text-cream hover:bg-cream/10 hover:text-cream">
-              <Link to="/pricing">Become a member</Link>
+              <Link to="/quizzes">Browse quizzes</Link>
             </Button>
           </motion.div>
 
@@ -95,8 +102,54 @@ function Index() {
         </div>
       </section>
 
+      {/* 4-Phase Study Plan — primary site flow */}
+      <section className="mx-auto max-w-7xl px-6 py-20">
+        <div className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">The Algebrix Method</p>
+          <h2 className="mt-2 mx-auto max-w-2xl font-display text-4xl font-extrabold md:text-5xl">
+            Follow the 4-phase study plan
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            Your guided path from topic mastery to full exam simulation. Start at Phase 1 or jump to the phase you need.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {PHASE_PREVIEW.map((p) => {
+            const Icon = p.icon;
+            return (
+              <Link
+                key={p.n}
+                to="/study-plan"
+                className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-soft transition hover:-translate-y-1 hover:border-primary hover:shadow-glow"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-glow">
+                    <Icon className="h-6 w-6" />
+                  </span>
+                  <span className="font-display text-4xl font-extrabold text-foreground/15">0{p.n}</span>
+                </div>
+                <h3 className="mt-5 font-display text-lg font-bold">Phase {p.n} · {p.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                  Open phase <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+        <div className="mt-10 text-center">
+          <Button asChild size="lg" className="rounded-full bg-emerald-grad px-7 text-primary-foreground hover:opacity-90">
+            <Link to="/study-plan">See the full study plan <ArrowRight className="ml-1 h-4 w-4" /></Link>
+          </Button>
+        </div>
+      </section>
+
       {/* Subject group panels — RV-style big rounded blocks with sub-buttons */}
-      <section className="mx-auto max-w-7xl px-6 py-20 space-y-6">
+      <section className="mx-auto max-w-7xl px-6 pb-20 space-y-6">
+        <div className="mb-2 text-center">
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Or jump straight in</p>
+          <h2 className="mt-2 font-display text-3xl font-extrabold md:text-4xl">Pick a subject</h2>
+        </div>
         {SUBJECT_GROUPS.map((g, gi) => (
           <motion.div
             key={g.slug}
