@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Stripe from "stripe";
-import { wcPost } from "@/server/woocommerce.server";
+import { wcPost, wpEnsureStudentUser } from "@/server/woocommerce.server";
 
 export const Route = createFileRoute("/api/public/stripe-webhook")({
   server: {
@@ -56,6 +56,20 @@ async function registerWcOrder(stripe: Stripe, session: Stripe.Checkout.Session)
   const [firstName, ...rest] = customerName.split(" ");
   const lastName = rest.join(" ");
 
+  // Ensure a WP user exists with role "student" (idempotent — won't duplicate).
+  let wpUserId: number | null = null;
+  if (customerEmail) {
+    try {
+      wpUserId = await wpEnsureStudentUser({
+        email: customerEmail,
+        firstName,
+        lastName,
+      });
+    } catch (err) {
+      console.error("Could not create/find WP student user", err);
+    }
+  }
+
   const totalPaid =
     typeof session.amount_total === "number" ? (session.amount_total / 100).toFixed(2) : "0.00";
   const currency = (session.currency || "usd").toUpperCase();
@@ -74,6 +88,7 @@ async function registerWcOrder(stripe: Stripe, session: Stripe.Checkout.Session)
     set_paid: true,
     status: "completed",
     currency,
+    ...(wpUserId ? { customer_id: wpUserId } : {}),
     billing: {
       first_name: firstName || "Customer",
       last_name: lastName || "",
