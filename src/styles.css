@@ -41,6 +41,8 @@
   --color-emerald-deep: var(--emerald-deep);
   --color-cream: var(--cream);
   --color-gold: var(--gold);
+  --color-promo: var(--promo);
+  --color-promo-foreground: var(--promo-foreground);
 }
 
 :root {
