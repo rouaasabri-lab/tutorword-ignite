@@ -3,50 +3,102 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Check, Crown } from "lucide-react";
+import { Check, Crown, Zap } from "lucide-react";
 import { createCheckout } from "@/utils/checkout.functions";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — algebrix IGCSE" },
+      { title: "Pricing — Algebrix IGCSE" },
       { name: "description", content: "Free forever for limited quizzes. Go Pro for the full IGCSE library, every subject and topic." },
     ],
   }),
   component: PricingPage,
 });
 
-const FREE = [
-  "1 free quiz per subject",
-  "Sample topic notes",
-  "Basic progress tracking",
-  "Access on any device",
-];
-
-const PRO = [
-  "Unlimited quizzes, all subjects",
-  "Full topic notes & summaries",
-  "Exam-grade question banks",
-  "Detailed mastery analytics",
-  "New content every month",
-  "Priority email support",
+const TIERS = [
+  {
+    name: "Free",
+    price: "$0",
+    period: "Forever",
+    badge: null,
+    cta: { label: "Start free", to: "/quizzes" as const, variant: "outline" as const },
+    items: [
+      "Mode 1 only (Individual Topic)",
+      "2 subjects max",
+      "5 questions per session",
+      "Basic score at end",
+      "No card needed, no time limit",
+    ],
+    purpose: "Get students addicted to the practice loop",
+    highlighted: false,
+  },
+  {
+    name: "Pro Monthly",
+    price: "$25",
+    period: "/mo",
+    badge: null,
+    plan: "monthly" as const,
+    cta: { label: "Go Pro Monthly", variant: "default" as const },
+    items: [
+      "All 4 modes unlocked",
+      "All IGCSE subjects",
+      "Unlimited questions",
+      "Instant feedback + explanations",
+      "Full session analytics",
+      "Cancel anytime",
+    ],
+    purpose: "Capture year-round students and parents who want flexibility",
+    highlighted: false,
+  },
+  {
+    name: "Pro Annual",
+    price: "$199",
+    period: "/yr",
+    badge: "Best value",
+    plan: "yearly" as const,
+    cta: { label: "Go Pro Annual", variant: "default" as const },
+    items: [
+      "Everything in Pro Monthly",
+      "Saves $101 vs monthly ($300/yr)",
+      "Works out to $16.58/mo",
+      "33% saving",
+    ],
+    purpose: "Lock in serious students, reduce churn, better revenue predictability",
+    highlighted: true,
+  },
+  {
+    name: "Exam Bundle",
+    price: "$39",
+    period: " one-time",
+    badge: null,
+    plan: "bundle" as const,
+    cta: { label: "Get Exam Bundle", variant: "default" as const },
+    items: [
+      "3 months full Pro access",
+      "No subscription, no auto-renew",
+      "Targeted at May/June and Oct/Nov exam windows",
+      "Countdown timer tied to real IGCSE exam dates",
+    ],
+    purpose: "Capture students who only prep before exams, and parents who resist subscriptions",
+    highlighted: false,
+  },
 ];
 
 function PricingPage() {
-  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
-  const [loading, setLoading] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
-  async function upgrade() {
-    setLoading(true);
+  async function upgrade(plan: "monthly" | "yearly" | "bundle") {
+    setLoadingPlan(plan);
     setErr(null);
     try {
-      const res = await createCheckout({ data: { plan: billing } });
+      const res = await createCheckout({ data: { plan } });
       if (res?.url) window.location.href = res.url;
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Checkout failed");
     } finally {
-      setLoading(false);
+      setLoadingPlan(null);
     }
   }
 
@@ -61,62 +113,82 @@ function PricingPage() {
           <p className="mx-auto mt-5 max-w-xl text-cream/75">
             Start free, upgrade when you want the full IGCSE library.
           </p>
-          <div className="mt-8 inline-flex items-center rounded-full bg-cream/10 p-1 text-sm ring-1 ring-cream/15">
-            {(["monthly", "yearly"] as const).map((b) => (
-              <button
-                key={b}
-                onClick={() => setBilling(b)}
-                className={`rounded-full px-5 py-2 font-semibold transition ${billing === b ? "bg-emerald-grad text-primary-foreground" : "text-cream/70"}`}
-              >
-                {b === "monthly" ? "Monthly" : "Yearly · save 20%"}
-              </button>
-            ))}
-          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-6 pb-24">
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-border bg-card p-8 shadow-soft">
-            <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Free</p>
-            <p className="mt-3 font-display text-5xl font-bold">$0</p>
-            <p className="mt-1 text-sm text-muted-foreground">Forever. No card needed.</p>
-            <Button asChild variant="outline" className="mt-6 w-full">
-              <Link to="/quizzes">Start free</Link>
-            </Button>
-            <ul className="mt-8 space-y-3 text-sm">
-              {FREE.map((f) => (
-                <li key={f} className="flex items-start gap-3"><Check className="mt-0.5 h-4 w-4 text-primary" /> {f}</li>
-              ))}
-            </ul>
-          </div>
+      <section className="mx-auto max-w-6xl px-6 pb-24 pt-10">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {TIERS.map((tier) => (
+            <div
+              key={tier.name}
+              className={`relative flex flex-col rounded-3xl border p-7 shadow-soft transition hover:-translate-y-0.5 ${
+                tier.highlighted
+                  ? "border-primary bg-primary/5 shadow-glow"
+                  : "border-border bg-card"
+              }`}
+            >
+              {tier.badge && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 rounded-full bg-emerald-grad px-3 py-1 text-xs font-semibold text-primary-foreground shadow-glow">
+                  <Zap className="h-3.5 w-3.5" /> {tier.badge}
+                </div>
+              )}
 
-          <div className="relative overflow-hidden rounded-3xl bg-emerald-grad p-8 text-primary-foreground shadow-glow">
-            <div className="absolute right-6 top-6 inline-flex items-center gap-1 rounded-full bg-card/15 px-3 py-1 text-xs font-medium backdrop-blur">
-              <Crown className="h-3.5 w-3.5" /> Most popular
+              <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                {tier.name}
+              </p>
+              <p className="mt-3 font-display text-4xl font-bold">
+                {tier.price}
+                <span className="text-base font-normal text-muted-foreground">
+                  {tier.period}
+                </span>
+              </p>
+
+              {tier.cta.to ? (
+                <Button asChild variant={tier.cta.variant} className="mt-5 w-full">
+                  <Link to={tier.cta.to}>{tier.cta.label}</Link>
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => tier.plan && upgrade(tier.plan)}
+                  disabled={!!loadingPlan}
+                  variant={tier.cta.variant}
+                  className="mt-5 w-full"
+                >
+                  {loadingPlan === tier.plan ? "Redirecting…" : tier.cta.label}
+                </Button>
+              )}
+
+              <ul className="mt-6 flex-1 space-y-2.5 text-sm">
+                {tier.items.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5">
+                    <Check
+                      className={`mt-0.5 h-4 w-4 shrink-0 ${
+                        tier.highlighted ? "text-primary" : "text-primary/70"
+                      }`}
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <p className="mt-5 text-xs italic text-muted-foreground/80">
+                {tier.purpose}
+              </p>
             </div>
-            <p className="text-sm font-semibold uppercase tracking-wider opacity-80">Pro</p>
-            <p className="mt-3 font-display text-5xl font-bold">
-              {billing === "monthly" ? "$15" : "$144"}
-              <span className="text-base font-normal opacity-80">/{billing === "monthly" ? "mo" : "yr"}</span>
-            </p>
-            <p className="mt-1 text-sm opacity-80">
-              {billing === "yearly" ? "Equivalent to $12/mo · 2 months free" : "Cancel anytime"}
-            </p>
-            <Button onClick={upgrade} disabled={loading} className="mt-6 w-full bg-card text-foreground hover:bg-card/90">
-              {loading ? "Redirecting…" : "Upgrade to Pro"}
-            </Button>
-            {err && <p className="mt-3 text-xs opacity-90">{err}</p>}
-            <ul className="mt-8 space-y-3 text-sm">
-              {PRO.map((f) => (
-                <li key={f} className="flex items-start gap-3"><Check className="mt-0.5 h-4 w-4" /> {f}</li>
-              ))}
-            </ul>
-          </div>
+          ))}
         </div>
 
+        {err && (
+          <p className="mt-8 text-center text-sm text-destructive">{err}</p>
+        )}
+
         <p className="mt-10 text-center text-xs text-muted-foreground">
-          Secure checkout powered by Stripe. Add <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_SECRET_KEY</code>, <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_MONTHLY</code> and <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_YEARLY</code> to your environment.
+          Secure checkout powered by Stripe. Add{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_SECRET_KEY</code>,{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_MONTHLY</code>,{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_YEARLY</code>, and{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_BUNDLE</code>{" "}
+          to your environment.
         </p>
       </section>
       <Footer />
