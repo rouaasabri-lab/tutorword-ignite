@@ -31,9 +31,9 @@ export const createCheckout = createServerFn({ method: "POST" })
       billing_address_collection: "auto",
       customer_creation: "always",
       subscription_data: {
-        metadata: { plan: data.plan, source: "tutorworld" },
+        metadata: { plan: data.plan, source: "algebrix" },
       },
-      metadata: { plan: data.plan, source: "tutorworld" },
+      metadata: { plan: data.plan, source: "algebrix" },
     });
 
     return { url: session.url };

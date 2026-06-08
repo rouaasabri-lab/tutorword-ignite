@@ -63,7 +63,7 @@ async function registerWcOrder(stripe: Stripe, session: Stripe.Checkout.Session)
   const line = productId
     ? { product_id: productId, quantity: 1 }
     : {
-        name: `TutorWorld Pro — ${plan}`,
+        name: `Algebrix Pro — ${plan}`,
         quantity: 1,
         total: totalPaid,
       };
@@ -77,12 +77,12 @@ async function registerWcOrder(stripe: Stripe, session: Stripe.Checkout.Session)
     billing: {
       first_name: firstName || "Customer",
       last_name: lastName || "",
-      email: customerEmail || "no-reply@tutorworld.local",
+      email: customerEmail || "no-reply@algebrix.local",
     },
     line_items: [line],
     transaction_id: typeof session.subscription === "string" ? session.subscription : session.id,
     meta_data: [
-      { key: "_tutorworld_plan", value: plan },
+      { key: "_algebrix_plan", value: plan },
       { key: "_stripe_session_id", value: session.id },
       {
         key: "_stripe_subscription_id",

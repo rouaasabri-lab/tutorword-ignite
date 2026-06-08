@@ -10,8 +10,8 @@ import { SUBJECT_GROUPS } from "@/lib/subjects";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "tutorworld — Your Ultimate IGCSE Toolkit" },
-      { name: "description", content: "Tutor-built IGCSE quizzes, notes and exam-grade question banks. Free tier available, full access with tutorworld Gold." },
+      { title: "algebrix — Your Ultimate IGCSE Toolkit" },
+      { name: "description", content: "Tutor-built IGCSE quizzes, notes and exam-grade question banks. Free tier available, full access with algebrix Gold." },
     ],
   }),
   component: Index,
@@ -154,10 +154,10 @@ function Index() {
         ))}
       </section>
 
-      {/* Why tutorworld */}
+      {/* Why algebrix */}
       <section className="bg-secondary/40 py-20">
         <div className="mx-auto max-w-7xl px-6">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Why tutorworld</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Why algebrix</p>
           <h2 className="mt-2 max-w-2xl font-display text-4xl font-extrabold md:text-5xl">
             Built by tutors. <span className="text-primary">Loved by students.</span>
           </h2>
