@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubjectsRouteImport } from './routes/subjects'
+import { Route as StudyPlanRouteImport } from './routes/study-plan'
 import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AccountRouteImport } from './routes/account'
@@ -20,6 +21,11 @@ import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/
 const SubjectsRoute = SubjectsRouteImport.update({
   id: '/subjects',
   path: '/subjects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudyPlanRoute = StudyPlanRouteImport.update({
+  id: '/study-plan',
+  path: '/study-plan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizzesRoute = QuizzesRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/pricing': typeof PricingRoute
   '/quizzes': typeof QuizzesRoute
+  '/study-plan': typeof StudyPlanRoute
   '/subjects': typeof SubjectsRoute
   '/quiz/$slug': typeof QuizSlugRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/pricing': typeof PricingRoute
   '/quizzes': typeof QuizzesRoute
+  '/study-plan': typeof StudyPlanRoute
   '/subjects': typeof SubjectsRoute
   '/quiz/$slug': typeof QuizSlugRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/pricing': typeof PricingRoute
   '/quizzes': typeof QuizzesRoute
+  '/study-plan': typeof StudyPlanRoute
   '/subjects': typeof SubjectsRoute
   '/quiz/$slug': typeof QuizSlugRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/pricing'
     | '/quizzes'
+    | '/study-plan'
     | '/subjects'
     | '/quiz/$slug'
     | '/api/public/stripe-webhook'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/pricing'
     | '/quizzes'
+    | '/study-plan'
     | '/subjects'
     | '/quiz/$slug'
     | '/api/public/stripe-webhook'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/pricing'
     | '/quizzes'
+    | '/study-plan'
     | '/subjects'
     | '/quiz/$slug'
     | '/api/public/stripe-webhook'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   PricingRoute: typeof PricingRoute
   QuizzesRoute: typeof QuizzesRoute
+  StudyPlanRoute: typeof StudyPlanRoute
   SubjectsRoute: typeof SubjectsRoute
   QuizSlugRoute: typeof QuizSlugRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/subjects'
       fullPath: '/subjects'
       preLoaderRoute: typeof SubjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/study-plan': {
+      id: '/study-plan'
+      path: '/study-plan'
+      fullPath: '/study-plan'
+      preLoaderRoute: typeof StudyPlanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quizzes': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   PricingRoute: PricingRoute,
   QuizzesRoute: QuizzesRoute,
+  StudyPlanRoute: StudyPlanRoute,
   SubjectsRoute: SubjectsRoute,
   QuizSlugRoute: QuizSlugRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
@@ -187,3 +208,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
