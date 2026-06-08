@@ -183,12 +183,7 @@ function PricingPage() {
         )}
 
         <p className="mt-10 text-center text-xs text-muted-foreground">
-          Secure checkout powered by Stripe. Add{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_SECRET_KEY</code>,{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_MONTHLY</code>,{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_YEARLY</code>, and{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5">STRIPE_PRICE_BUNDLE</code>{" "}
-          to your environment.
+          Secure checkout powered by Stripe.
         </p>
       </section>
       <Footer />
