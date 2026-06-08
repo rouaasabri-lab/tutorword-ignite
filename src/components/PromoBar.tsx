@@ -24,7 +24,6 @@ export function PromoBar() {
           to="/pricing"
           className="flex flex-1 items-center justify-center gap-2 text-sm font-semibold hover:underline sm:text-base"
         >
-          <Sparkles className="h-4 w-4 shrink-0" />
           <span>🎓 New students get 15% off — claim your discount today!</span>
         </Link>
         <button
