@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { X, Sparkles } from "lucide-react";
+import { X } from "lucide-react";
 
 export function PromoBar() {
   const [visible, setVisible] = useState(true);
