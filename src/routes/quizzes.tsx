@@ -10,8 +10,8 @@ import { SAMPLE_QUIZZES } from "@/lib/sample-quizzes";
 export const Route = createFileRoute("/quizzes")({
   head: () => ({
     meta: [
-      { title: "IGCSE Quizzes — tutorworld" },
-      { name: "description", content: "Topic-by-topic IGCSE quizzes. Free quizzes available, full access with tutorworld Pro." },
+      { title: "IGCSE Quizzes — algebrix" },
+      { name: "description", content: "Topic-by-topic IGCSE quizzes. Free quizzes available, full access with algebrix Pro." },
     ],
   }),
   component: QuizzesPage,

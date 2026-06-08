@@ -10,8 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export const Route = createFileRoute("/account")({
   head: () => ({
     meta: [
-      { title: "Sign in — tutorworld" },
-      { name: "description", content: "Sign in or create your tutorworld account to track IGCSE quiz progress." },
+      { title: "Sign in — algebrix" },
+      { name: "description", content: "Sign in or create your algebrix account to track IGCSE quiz progress." },
     ],
   }),
   validateSearch: (s) => ({ status: (s.status as string) || undefined }),

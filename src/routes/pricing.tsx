@@ -9,7 +9,7 @@ import { createCheckout } from "@/utils/checkout.functions";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — tutorworld IGCSE" },
+      { title: "Pricing — algebrix IGCSE" },
       { name: "description", content: "Free forever for limited quizzes. Go Pro for the full IGCSE library, every subject and topic." },
     ],
   }),
