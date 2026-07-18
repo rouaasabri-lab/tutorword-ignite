@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { z } from "zod";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
@@ -31,15 +31,16 @@ const DIFFICULTIES = ["Easy", "Medium", "Hard"] as const;
 
 function QuizzesPage() {
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/quizzes" });
+  const navigate = Route.useNavigate();
 
   const level = (LEVELS as readonly string[]).includes(search.level) ? search.level : "IGCSE";
   const difficulty = (DIFFICULTIES as readonly string[]).includes(search.difficulty) ? search.difficulty : "";
   const topic = search.topic;
   const q = search.q.toLowerCase();
 
-  const setSearch = (patch: Partial<z.infer<typeof searchSchema>>) =>
-    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+  type QuizSearch = z.infer<typeof searchSchema>;
+  const setSearch = (patch: Partial<QuizSearch>) =>
+    navigate({ to: ".", search: (prev: QuizSearch) => ({ ...prev, ...patch }) });
 
   // All topics available for the active level (for the topic chip row)
   const topicsForLevel = useMemo(() => {
