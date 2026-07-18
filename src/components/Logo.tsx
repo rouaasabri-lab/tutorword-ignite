@@ -5,7 +5,7 @@ export function Logo({ className }: { className?: string }) {
     <img
       src={logoAsset.url}
       alt="Algebrix"
-      className={className || "h-12 w-auto shrink-0"}
+      className={className || "h-14 w-auto shrink-0"}
     />
   );
 }
