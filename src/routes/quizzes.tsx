@@ -38,8 +38,9 @@ function QuizzesPage() {
   const topic = search.topic;
   const q = search.q.toLowerCase();
 
-  const setSearch = (patch: Partial<z.infer<typeof searchSchema>>) =>
-    navigate({ to: ".", search: (prev) => ({ ...prev, ...patch }) });
+  type QuizSearch = z.infer<typeof searchSchema>;
+  const setSearch = (patch: Partial<QuizSearch>) =>
+    navigate({ to: ".", search: (prev: QuizSearch) => ({ ...prev, ...patch }) });
 
   // All topics available for the active level (for the topic chip row)
   const topicsForLevel = useMemo(() => {
