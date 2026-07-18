@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { z } from "zod";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
@@ -31,7 +31,7 @@ const DIFFICULTIES = ["Easy", "Medium", "Hard"] as const;
 
 function QuizzesPage() {
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/quizzes" });
+  const navigate = Route.useNavigate();
 
   const level = (LEVELS as readonly string[]).includes(search.level) ? search.level : "IGCSE";
   const difficulty = (DIFFICULTIES as readonly string[]).includes(search.difficulty) ? search.difficulty : "";
