@@ -1,12 +1,12 @@
-import logoAsset from "@/assets/algebrix-logo.png.asset.json";
+import logoAsset from "@/assets/algebrix-logo-horizontal.png.asset.json";
 
-export function Logo({ light = false, className }: { light?: boolean; className?: string }) {
+export function Logo({ className }: { className?: string }) {
   return (
     <img
       src={logoAsset.url}
       alt="Algebrix"
-      className={className || "h-9 w-auto shrink-0"}
-      style={light ? undefined : undefined}
+      className={className || "h-12 w-auto shrink-0"}
     />
   );
 }
+
