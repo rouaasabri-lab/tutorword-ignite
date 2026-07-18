@@ -39,7 +39,7 @@ function QuizzesPage() {
   const q = search.q.toLowerCase();
 
   const setSearch = (patch: Partial<z.infer<typeof searchSchema>>) =>
-    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+    navigate({ to: ".", search: (prev) => ({ ...prev, ...patch }) });
 
   // All topics available for the active level (for the topic chip row)
   const topicsForLevel = useMemo(() => {
