@@ -5,7 +5,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getEdexcelQuizBySlug, type EdexcelQuiz } from "@/lib/edexcel-quizzes";
-import { Check, X, ArrowRight, RotateCcw, Trophy, Clock, Eye } from "lucide-react";
+import { Check, X, ArrowRight, RotateCcw, Trophy, Clock, Eye, LineChart, ChevronDown } from "lucide-react";
+import { GraphingTool } from "@/components/GraphingTool";
 
 export const Route = createFileRoute("/quiz/$slug")({
   head: ({ params }) => {
@@ -63,6 +64,7 @@ function QuizRunner({ quiz, onExit }: { quiz: EdexcelQuiz; onExit: () => void })
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
   const [marks, setMarks] = useState<Record<string, Mark>>({});
   const [finished, setFinished] = useState(false);
+  const [showGraph, setShowGraph] = useState(false);
 
   const total = quiz.questions.length;
   const current = quiz.questions[index];
@@ -210,6 +212,32 @@ function QuizRunner({ quiz, onExit }: { quiz: EdexcelQuiz; onExit: () => void })
             rows={4}
             className="mt-6 w-full resize-y rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
           />
+
+          <div className="mt-4">
+            <button
+              onClick={() => setShowGraph((s) => !s)}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/50"
+            >
+              <LineChart className="h-3.5 w-3.5 text-primary" />
+              Interactive graph
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showGraph ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence initial={false}>
+              {showGraph && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-3">
+                    <GraphingTool />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {!isRevealed ? (
             <div className="mt-5 flex items-center justify-between">
